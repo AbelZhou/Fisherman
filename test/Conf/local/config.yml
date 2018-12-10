@@ -1,0 +1,15 @@
+cache:
+  engine:
+    memcached
+  prefix:
+    abelzhou_
+  expire:
+    300
+db:
+  engine:
+    mysql
+log:
+  dir:
+    /../Logs/
+  level:
+    0

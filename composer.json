@@ -1,0 +1,38 @@
+{
+  "name": "abelzhou/fisherman",
+  "description": "A data access service library.",
+  "authors": [
+    {
+      "name": "AbelZhou",
+      "email": "abel.zhou@hotmail.com"
+    }
+  ],
+  "require": {
+    "symfony/yaml": "4.2.0"
+  },
+  "type": "library",
+  "license": "Apache-2.0",
+  "keywoddrds": [
+    "DAO",
+    "Data access object",
+    "Data access service"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Fisherman\\Cache\\": "src/Cache/",
+      "Fisherman\\Cache\\Adapter\\": "src/Cache/Adapter/",
+      "Fisherman\\Core\\": "src/Core/",
+      "Fisherman\\DB\\": "src/DB/",
+      "Fisherman\\DB\\Adapter\\": "src/DB/Adapter/",
+      "Fisherman\\Func\\": "src/Func/",
+      "Fisherman\\Model\\": "src/Model/",
+      "Fisherman\\Module\\": "src/Module/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\Model\\Test\\": "test/Model/Test/",
+      "Test\\Moduel\\Test\\": "test/Module/Test/"
+    }
+  }
+}

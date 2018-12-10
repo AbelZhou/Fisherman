@@ -1,0 +1,6 @@
+2018-12-05 11:39:47::[INFO]    connect::SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: YES)
+2018-12-05 11:41:53::[INFO]    connect::SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: YES)
+2018-12-05 11:42:33::[INFO]    connect::SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES)
+2018-12-05 11:43:19::[INFO]    connect::SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES)
+2018-12-05 12:15:21::[INFO]    connect::SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES)
+2018-12-05 12:26:04::[ERROR]   connect::SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: YES)
