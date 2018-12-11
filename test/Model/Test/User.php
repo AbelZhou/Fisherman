@@ -27,6 +27,11 @@ class User extends BaseModel {
         return $res;
     }
 
+    /**
+     * @param $oldName
+     * @param $newName
+     * @return number
+     */
     public function modifyName($oldName, $newName) {
         $res = $this->dao->conn(false)->setTag("user")
             ->preparedSql("UPDATE `user` SET `name`=:name WHERE `name`=:oldname", array(":name" => $newName, ":oldname" => $oldName))

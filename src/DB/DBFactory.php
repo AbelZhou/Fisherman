@@ -21,13 +21,12 @@ class DBFactory{
      * DBFactory constructor.
      * @param $db_tag
      * @param string $db_adapter
-     * @throws \Exception
      */
     function __construct($db_tag,$db_adapter='mysql'){
         $config = Config::getFile("db");
 
         if(!isset($config[$db_tag])){
-            throw new \Exception('Can not found the db_config db_tag:'.$db_tag);
+            throw new \RuntimeException('Can not found the db_config db_tag:'.$db_tag);
         }
         $this->db_config = $config[$db_tag];
         $this->adapter = $db_adapter;
@@ -38,7 +37,6 @@ class DBFactory{
     /**
      *
      * @return DBInterface|null
-     * @throws \Exception
      */
     public function getDBAdapter(){
         $adapter = null;

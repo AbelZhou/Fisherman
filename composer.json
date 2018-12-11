@@ -32,7 +32,7 @@
   "autoload-dev": {
     "psr-4": {
       "Test\\Model\\Test\\": "test/Model/Test/",
-      "Test\\Moduel\\Test\\": "test/Module/Test/"
+      "Test\\Module\\Test\\": "test/Module/Test/"
     }
   }
 }

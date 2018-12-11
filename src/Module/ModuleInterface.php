@@ -10,9 +10,5 @@
 namespace Fisherman\Module;
 
 interface ModuleInterface{
-    /**
-     * 单例
-     * @return mixed
-     */
-    static function getInstance();
+
 }

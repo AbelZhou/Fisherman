@@ -9,7 +9,6 @@
 namespace Fisherman\DB;
 
 
-use Exception;
 
 abstract class DBAbstract{
     protected $_writer;
@@ -21,14 +20,13 @@ abstract class DBAbstract{
      * database initialize
      * @param $db_config
      * @param string $db_tags
-     * @throws Exception
      */
     protected function _init($db_config,$db_tags='') {
         if (empty ( $db_config ['writer'] )) {
-            throw new Exception ( 'Can not found the database writer config.' );
+            throw new \RuntimeException ( 'Can not found the database writer config.' );
         }
         if (empty ( $db_config ['reader'] ) || ! is_array ( $db_config ['reader'] )) {
-            throw new Exception ( 'Can not found the database reader config.' );
+            throw new \RuntimeException ( 'Can not found the database reader config.' );
         }
         $this->_writer = $db_config ['writer'];
         if(!empty($db_tags) && isset(self::$_reader_dbs[$db_tags])){

@@ -12,16 +12,20 @@ namespace Fisherman\Module;
 abstract class ModuleAbstract {
     private static $_instance = null;
 
-    private function __construct() {
+    private final function __construct() {
+        $this->init();
     }
 
     /**
-     *
-     * @param $className __CLASS__
-     * @return null
+     * Singleton
+     * @return static
      */
-    protected static function _getInstance($className) {
+    public static function getInstance() {
         if (self::$_instance === null) {
+            $className = get_called_class();
+            if ($className == false) {
+                throw new \RuntimeException("Module class not found.");
+            }
             self::$_instance = new $className();
         }
         return self::$_instance;
@@ -34,4 +38,10 @@ abstract class ModuleAbstract {
         // TODO: Implement __clone() method.
         echo "Hi. Clone.";
     }
+
+    /**
+     * be used in construct.
+     * @return mixed
+     */
+    abstract protected function init();
 }

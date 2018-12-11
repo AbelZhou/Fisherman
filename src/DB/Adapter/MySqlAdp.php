@@ -11,7 +11,6 @@ namespace Fisherman\DB\Adapter;
 
 
 use ArrayObject;
-use Exception;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -57,7 +56,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
      * MySqlAdp constructor.
      * @param $db_config
      * @param $db_tag
-     * @throws \Exception
      */
     public function __construct($db_config, $db_tag) {
         $this->_init($db_config, $db_tag);
@@ -117,15 +115,14 @@ class MySqlAdp extends DBAbstract implements DBInterface {
      * @param $sql
      * @param $data
      * @return mixed
-     * @throws Exception
      */
     function setData($sql, $data) {
         // TODO: Implement setData() method.
         if (!is_array($data)) {
-            throw new Exception ('The data must be array.');
+            throw new \RuntimeException('The data must be array.');
         }
         if (!is_string($sql)) {
-            throw new Exception ('The sql must be string.');
+            throw new \RuntimeException('The sql must be string.');
         }
         $this->prep_sql = $sql;
         $this->prep_data = $data;
@@ -136,7 +133,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * execute
      * @return mixed
-     * @throws Exception
      */
     function execute() {
         // TODO: Implement execute() method.
@@ -163,7 +159,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * commit transaction
      * @return mixed
-     * @throws Exception
      */
     function commit() {
         // TODO: Implement commit() method.
@@ -183,7 +178,7 @@ class MySqlAdp extends DBAbstract implements DBInterface {
         }
 
         $this->_close();
-        throw new Exception ('There is no active transaction.');
+        throw new \RuntimeException ('There is no active transaction.');
     }
 
     /**
@@ -209,7 +204,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * get affected count
      * @return mixed
-     * @throws Exception
      */
     function affectedCount() {
         // TODO: Implement affectedCount() method.
@@ -223,7 +217,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * get last insert id.
      * @return mixed
-     * @throws Exception
      */
     function lastInsertId() {
         // TODO: Implement lastInsertId() method.
@@ -237,7 +230,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * get one result
      * @return mixed
-     * @throws Exception
      */
     function fetchOne() {
         // TODO: Implement fetchOne() method.
@@ -251,7 +243,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * get all result
      * @return mixed
-     * @throws Exception
      */
     function fetchAll() {
         // TODO: Implement fetchAll() method.
@@ -266,7 +257,6 @@ class MySqlAdp extends DBAbstract implements DBInterface {
      * get column
      * @param $columnNum
      * @return mixed
-     * @throws Exception
      */
     function fetchColumn($columnNum) {
         // TODO: Implement fetchColumn() method.
@@ -280,23 +270,21 @@ class MySqlAdp extends DBAbstract implements DBInterface {
     /**
      * 校验链接
      *
-     * @throws Exception
      */
     private function checkStatus() {
         if ($this->pdo === null) {
-            throw new Exception ('pdo is null.');
+            throw new \RuntimeException ('pdo is null.');
         }
     }
 
     /**
      * 执行语句
      * 调整为单条执行，执行完毕后清理 sql
-     * @throws Exception
      */
     private function exec() {
         // 校验数据是否正确
         if (!is_string($this->prep_sql) || !is_array($this->prep_data)) {
-            throw new Exception ('Type is error.');
+            throw new \RuntimeException ('Type is error.');
         }
 
         $this->stmt = $this->pdo->prepare($this->prep_sql, array(
