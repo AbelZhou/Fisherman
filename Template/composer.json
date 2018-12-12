@@ -1,0 +1,9 @@
+{
+  "require": {
+    "abelzhou/fisherman": "^1.0"
+  },
+  "autoload-dev": {
+    "Model\\Tablename\\": "Model/Tablename",
+    "Module\\Tablename\\": "Module/Tablename"
+  }
+}

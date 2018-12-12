@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+/**
+ *
+ * Author: abel
+ * Email:abel.zhou@hotmail.com
+ * Date: 2018/12/12
+ * Time: 11:42
+ */
+
+define("FINISHERMAN_PATH", __DIR__);
+$workPath = getcwd();
+$paths = array(
+    $workPath . "/Conf/local",
+    $workPath . "/Conf/rls",
+    $workPath . "/Conf/test",
+    $workPath . "/Model/DBName",
+    $workPath . "/Module/DBName",
+);
+
+foreach ($paths as $path) {
+    if (!mkdir($path, 0755, true) && !is_dir($path)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+    }
+}
+
+$files = array(
+    "/Conf/local/cache.yml",
+    "/Conf/local/config.yml",
+    "/Conf/local/db.yml",
+    "/Model/DBName/Tablename.php",
+    "/Module/DBName/Servicename.php",
+    "/composer.json"
+);
+
+foreach ($files as $file) {
+    copy(FINISHERMAN_PATH . "/Template" . $file, $workPath . $file);
+    chmod($workPath . $file, 0755);
+}
+
+print "Finished.\n";
+
