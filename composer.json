@@ -1,6 +1,9 @@
 {
   "name": "abelzhou/fisherman",
   "description": "A data access service library.",
+  "bin": [
+    "bin/init"
+  ],
   "authors": [
     {
       "name": "AbelZhou",
