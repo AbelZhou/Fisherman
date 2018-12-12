@@ -7,7 +7,7 @@ test:
     user:
       root
     password:
-      asdewq
+      123456
     database:
       test
     charset:
@@ -20,7 +20,7 @@ test:
       user:
         root
       password:
-        asdewq
+        123456
       database:
         test
       charset:
