@@ -57,7 +57,7 @@ class InitCommand extends Command {
         );
 
         foreach ($files as $file) {
-            copy(FINISHERMAN_PATH . "/Template" . $file, $this->workPath . $file);
+            copy(FINISHERMAN_PATH . "/template" . $file, $this->workPath . $file);
             chmod($this->workPath . $file, 0755);
         }
 
