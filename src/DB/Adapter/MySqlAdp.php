@@ -93,6 +93,9 @@ class MySqlAdp extends DBAbstract implements DBInterface {
                 self::$pdo_arr[$hash] = $pdo;
             }
         } catch (PDOException $e) {
+            if (RUNTIME_ENV === 'local'){
+                throw $e;
+            }
             $msg = $e->getMessage();
             Log::write('system_sql', 'connect', $msg, Log::LEVEL_ERROR);
         }

@@ -2,8 +2,10 @@
   "require": {
     "abelzhou/fisherman": "^1.0"
   },
-  "autoload-dev": {
-    "Model\\Tablename\\": "Model/Tablename",
-    "Module\\Tablename\\": "Module/Tablename"
+  "autoload": {
+    "psr-4": {
+      "Model\\DBName\\": "Model/DBName/",
+      "Module\\DBName\\": "Module/DBName/"
+    }
   }
 }

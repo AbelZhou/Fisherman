@@ -16,6 +16,6 @@ class Tablename extends BaseModel{
     }
 
     public function someFunc(){
-        return $this->dao->conn(false)->preparedSql("some sql",array())->fetchOne();
+        return $this->dao->conn(false)->setTag("cache_tag_")->preparedSql("some sql",array())->fetchOne();
     }
 }
