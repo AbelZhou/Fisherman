@@ -7,7 +7,7 @@
  * Time: 11:25
  */
 
-namespace Command;
+namespace Fisherman\Command;
 
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -65,7 +65,7 @@ class InitCommand extends Command {
         $executeOutput = null;
         $command = <<<'CMD'
                 if  command -v composer > /dev/null; then
-                    composer --optimize-autoloader
+                    composer install --optimize-autoloader
                 else
                     echo "failed";
                 fi
@@ -74,7 +74,7 @@ CMD;
             exec($command, $executeOutput);
             if (!empty($executeOutput) && $executeOutput[0] === 'failed') {
                 $output->writeln("Composer command has not found.");
-                $output->writeln('You must execute "composer --optimize-autoloader" for build project.');
+                $output->writeln('You must execute "composer install --optimize-autoloader" for build project.');
             }
         }
         $output->writeln("Finished");
