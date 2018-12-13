@@ -4,8 +4,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Model\\DBName\\": "Model/DBName/",
-      "Module\\DBName\\": "Module/DBName/"
+      "Model\\DBName\\": "Model/DBName",
+      "Module\\DBName\\": "Module/DBName"
     }
   }
 }
