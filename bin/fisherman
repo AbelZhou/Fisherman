@@ -12,4 +12,17 @@ $fishermanPath = __DIR__."/../";
 define("FINISHERMAN_PATH", $fishermanPath);
 $workPath = getcwd();
 
+use Command\InitCommand;
+use Symfony\Component\Console\Application;
 
+
+$app = new Application("finshman","1.0.x");
+//create commands
+//init project
+$initCommand = new InitCommand($workPath);
+
+//register commands
+$app->add($initCommand);
+
+//run
+$app->run();
