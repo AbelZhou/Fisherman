@@ -2,7 +2,7 @@
   "name": "abelzhou/fisherman",
   "description": "A data access service library.",
   "bin": [
-    "bin/init"
+    "bin/fisherman"
   ],
   "authors": [
     {
@@ -12,15 +12,11 @@
   ],
   "require": {
     "php": ">5.3.0",
-    "symfony/yaml": "4.2.0"
+    "symfony/yaml": "4.2.0",
+    "symfony/console": "^4.2"
   },
   "type": "library",
   "license": "Apache-2.0",
-  "keywoddrds": [
-    "DAO",
-    "Data access object",
-    "Data access service"
-  ],
   "autoload": {
     "psr-4": {
       "Fisherman\\Cache\\": "src/Cache/",
@@ -30,7 +26,8 @@
       "Fisherman\\DB\\Adapter\\": "src/DB/Adapter/",
       "Fisherman\\Func\\": "src/Func/",
       "Fisherman\\Model\\": "src/Model/",
-      "Fisherman\\Module\\": "src/Module/"
+      "Fisherman\\Module\\": "src/Module/",
+      "Fisherman\\Command\\": "src/Command/"
     }
   },
   "autoload-dev": {
