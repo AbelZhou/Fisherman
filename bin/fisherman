@@ -7,7 +7,7 @@
  * Date: 2018/12/12
  * Time: 11:42
  */
-
+require "vendor/autoload.php";
 $fishermanPath = __DIR__."/../";
 define("FINISHERMAN_PATH", $fishermanPath);
 $workPath = getcwd();
