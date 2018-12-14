@@ -16,9 +16,8 @@ class Config {
      * @param $configFileName
      * @return mixed
      */
-    public static function getFile($configFileName, $configPath = '') {
-        $configPath = $configPath === '' ? ROOTPATH : $configPath;
-        $filePath = $configPath . "/Conf/" . RUNTIME_ENV . "/" . $configFileName . ".yml";
-        return YAML::parseFile($filePath);
+    public static function getFile($configFileName) {
+        $configPath = ROOTPATH . "/Conf/" . RUNTIME_ENV . "/" . $configFileName . ".yml";
+        return YAML::parseFile($configPath);
     }
 }
