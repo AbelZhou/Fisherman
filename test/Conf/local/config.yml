@@ -1,3 +1,6 @@
+project:
+  name: # project name which is namespace prefix like "Test/Model/TableName"
+    Test
 cache:
   engine:
     memcached

@@ -1,3 +1,6 @@
+project:
+  name: # project name which is namespace prefix like "Demo/Model/TableName"
+    Demo
 cache:
   engine:
     memcached
