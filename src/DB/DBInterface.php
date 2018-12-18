@@ -8,6 +8,8 @@
  */
 namespace Fisherman\DB;
 
+use PDOStatement;
+
 interface DBInterface {
     /**
      * 获得链接
@@ -29,6 +31,13 @@ interface DBInterface {
      * @return mixed
      */
     function execute();
+
+    /**
+     * execute sql.
+     * @param string $statement
+     * @return bool|mixed|PDOStatement
+     */
+    function query($statement);
 
     /**
      * begin transaction

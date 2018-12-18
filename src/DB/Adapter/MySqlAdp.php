@@ -324,4 +324,14 @@ class MySqlAdp extends DBAbstract implements DBInterface {
         }
         return true;
     }
+
+    /**
+     * execute sql.
+     * @param string $statement
+     * @return bool|mixed|PDOStatement
+     */
+    function query($statement) {
+        // TODO: Implement executeSql() method.
+        return $this->pdo->query($statement);
+    }
 }
