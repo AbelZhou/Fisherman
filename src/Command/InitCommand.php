@@ -34,8 +34,8 @@ class InitCommand extends Command {
             "/Conf/local",
             "/Conf/rls",
             "/Conf/test",
-            "/Model/DBName",
-            "/Module/DBName",
+//            "/Model/DBName",
+//            "/Module/DBName",
         );
 
         foreach ($paths as $path) {

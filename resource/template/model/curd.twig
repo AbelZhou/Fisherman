@@ -8,14 +8,15 @@
 {% endblock %}
 
 {% block method %}
+
     /**
     * Insert
-    {% for name in requiredFields %}
+{% for name in requiredFields %}
     * @param {{ fields[name]['propType'] }} ${{ name }}
-    {% endfor %}
-    {% for name in noRequiredFields %}
+{% endfor %}
+{% for name in noRequiredFields %}
     * @param {{ fields[name]['propType'] }}|null ${{ name }}
-    {% endfor %}
+{% endfor %}
     * @return int
     */
     public function insert({% for key,name in requiredFields %}${{ fields[name]["camel_down"] }}{% if key != requiredFields|length-1 or noRequiredFields|length != 0 %}, {% endif %}{% endfor %}{% for key,name in noRequiredFields %}${{ fields[name]["camel_down"] }} = null{% if key != noRequiredFields|length-1 %}, {% endif %}{% endfor %}) {
@@ -32,9 +33,9 @@
 
     /**
     * update by pk
-    {% for name in pkFields %}
+{% for name in pkFields %}
     * @param {{ fields[name]['propType'] }} ${{ name }}
-    {% endfor %}
+{% endfor %}
     * @param array $updateArr array("username"=>"zhangsan","password"=>"abcdefg")
     * @return number|false
     */
@@ -69,9 +70,9 @@
 
     /**
     * Delete by pk
-    {% for name in pkFields %}
+{% for name in pkFields %}
     * @param {{ fields[name]['propType'] }} ${{ name }}
-    {% endfor %}
+{% endfor %}
     * @return number
     */
     public function deleteByPk({% for key,name in pkFields %}${{ fields[name]["camel_down"] }}{% if key != pkFields|length-1 %}, {% endif %}{% endfor %}) {
@@ -88,9 +89,9 @@
 
     /**
     * Get by pk
-    {% for name in pkFields %}
+{% for name in pkFields %}
     * @param {{ fields[name]['propType'] }} ${{ name }}
-    {% endfor %}
+{% endfor %}
     * @return mixed
     */
     public function getByPk({% for key,name in pkFields %}${{ fields[name]["camel_down"] }}{% if key != pkFields|length-1 %}, {% endif %}{% endfor %}) {
