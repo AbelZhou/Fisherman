@@ -50,8 +50,8 @@ class InitCommand extends Command {
             "/Conf/local/cache.yml",
             "/Conf/local/config.yml",
             "/Conf/local/db.yml",
-            "/Model/DBName/Tablename.php",
-            "/Module/DBName/Servicename.php",
+//            "/Model/DBName/Tablename.php",
+//            "/Module/DBName/Servicename.php",
             "/composer.json",
             "/bootstrap.php"
         );
@@ -62,21 +62,21 @@ class InitCommand extends Command {
         }
 
         $output->writeln("Building completed.");
-        $executeOutput = null;
-        $command = <<<'CMD'
-                if  command -v composer > /dev/null; then
-                    composer dump-autoload -o
-                else
-                    echo "failed";
-                fi
-CMD;
-        if (function_exists("exec")) {
-            exec($command, $executeOutput);
-            if (!empty($executeOutput) && $executeOutput[0] === 'failed') {
-                $output->writeln("Composer command has not found.");
-                $output->writeln('You must execute "composer dump-autoload -o" for autoload project.');
-            }
-        }
+//        $executeOutput = null;
+//        $command = <<<'CMD'
+//                if  command -v composer > /dev/null; then
+//                    composer dump-autoload -o
+//                else
+//                    echo "failed";
+//                fi
+//CMD;
+//        if (function_exists("exec")) {
+//            exec($command, $executeOutput);
+//            if (!empty($executeOutput) && $executeOutput[0] === 'failed') {
+//                $output->writeln("Composer command has not found.");
+//                $output->writeln('You must execute "composer dump-autoload -o" for autoload project.');
+//            }
+//        }
         $output->writeln("Finished");
     }
 

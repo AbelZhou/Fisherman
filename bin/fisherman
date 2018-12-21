@@ -7,12 +7,18 @@
  * Date: 2018/12/12
  * Time: 11:42
  */
-require "vendor/autoload.php";
+if (file_exists("bootstrap.php")) {
+    require "bootstrap.php";
+} else {
+    require "vendor/autoload.php";
+}
+
 $fishermanPath = __DIR__."/../";
 define("FINISHERMAN_PATH", $fishermanPath);
 $workPath = getcwd();
 
 use Fisherman\Command\InitCommand;
+use Fisherman\Command\MakeModel;
 use Symfony\Component\Console\Application;
 
 
@@ -20,9 +26,10 @@ $app = new Application("finshman","1.0.x");
 //create commands
 //init project
 $initCommand = new InitCommand($workPath);
-
+$makeModelCommand = new MakeModel($workPath);
 //register commands
 $app->add($initCommand);
+$app->add($makeModelCommand);
 
 //run
 $app->run();

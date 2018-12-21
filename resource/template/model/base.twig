@@ -1,0 +1,25 @@
+<?php
+/**
+ *
+ * DateTime: {{ dateTime }}
+ * create by fisherman.
+ */
+
+namespace {{ projectName }}\Model\{{ spaceName }};
+
+use Fisherman\Model\BaseModel;
+
+class {{ className }} extends BaseModel {
+    private static $cacheTag = "{{ spaceName }}_{{ className }}_";
+    {% block classHead %}
+    {% endblock %}
+
+    function __construct() {
+        $this->_init("{{ dbTag }}");
+}
+
+{% block method %}
+{% endblock %}
+
+
+}

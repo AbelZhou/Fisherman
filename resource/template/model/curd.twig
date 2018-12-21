@@ -1,0 +1,106 @@
+{% extends "/model/base.twig" %}
+{% block classHead %}
+    private $fields = [
+    {% for key,name in fields %}
+        "{{ key }}",
+    {% endfor %}
+    ];
+{% endblock %}
+
+{% block method %}
+    /**
+    * Insert
+    {% for name in requiredFields %}
+    * @param {{ fields[name]['propType'] }} ${{ name }}
+    {% endfor %}
+    {% for name in noRequiredFields %}
+    * @param {{ fields[name]['propType'] }}|null ${{ name }}
+    {% endfor %}
+    * @return int
+    */
+    public function insert({% for key,name in requiredFields %}${{ fields[name]["camel_down"] }}{% if key != requiredFields|length-1 or noRequiredFields|length != 0 %}, {% endif %}{% endfor %}{% for key,name in noRequiredFields %}${{ fields[name]["camel_down"] }} = null{% if key != noRequiredFields|length-1 %}, {% endif %}{% endfor %}) {
+        $sql = "INSERT INTO `{{ tableName }}` ({% for key,name in requiredFields %}`{{ name }}`{% if key != requiredFields|length-1 or noRequiredFields|length != 0 %}, {% endif %}{% endfor %}{% for key,name in noRequiredFields %}`{{ name }}`{% if key != noRequiredFields|length-1 %}, {% endif %}{% endfor %}) " .
+        "VALUES ({% for key,name in requiredFields %}:{{ name }}{% if requiredFields|length-1 or noRequiredFields|length != 0 %}, {% endif %}{% endfor %}{% for key,name in noRequiredFields %}:{{ name }}{% if key != noRequiredFields|length-1 %}, {% endif %}{% endfor %})";
+        $data = [
+        {% for name,value in fields if value["autoIncrement"]==false %}
+            ":{{ name }}" => ${{ value["camel_down"] }},
+        {% endfor %}
+        ];
+
+        return $this->dao->conn(false)->setTag(self::$cacheTag)->preparedSql($sql, $data)->lastInsertId();
+    }
+
+    /**
+    * update by pk
+    {% for name in pkFields %}
+    * @param {{ fields[name]['propType'] }} ${{ name }}
+    {% endfor %}
+    * @param array $updateArr array("username"=>"zhangsan","password"=>"abcdefg")
+    * @return number|false
+    */
+    public function updateByPk({% for key,name in pkFields %}${{ fields[name]["camel_down"] }}, {% endfor %}array $updateArr) {
+
+        $keys = array_keys($updateArr);
+        $endKey = array_keys($keys);
+
+        $sqlSet = "SET ";
+        $data = [
+        {% for key,name in pkFields %}
+            ":{{ name }}" => ${{ fields[name]["camel_down"] }},
+        {% endfor %}
+        ];
+
+        foreach ($updateArr as $key => $val) {
+            if (!in_array($key, $this->fields)) {
+                return false;
+            }
+            $sqlSet .= "`{$key}`=:{$key}";
+            if ($key != $endKey) {
+                $sqlSet .= ",";
+            }
+            $sqlSet .= " ";
+            $data[":" . $key] = $val;
+        }
+
+        $sql = "UPDATE `{{ tableName }}` " . $sqlSet .
+            "WHERE {% for key,name in pkFields %}{% if key != 0 %} and {% endif %}`{{ name }}`=:{{ name }}{% endfor %}";
+        return $this->dao->conn(false)->setTag(self::$cacheTag)->preparedSql($sql, $data)->affectedCount();
+    }
+
+    /**
+    * Delete by pk
+    {% for name in pkFields %}
+    * @param {{ fields[name]['propType'] }} ${{ name }}
+    {% endfor %}
+    * @return number
+    */
+    public function deleteByPk({% for key,name in pkFields %}${{ fields[name]["camel_down"] }}{% if key != pkFields|length-1 %}, {% endif %}{% endfor %}) {
+
+        $sql = "DELETE FROM `{{ tableName }}` " .
+            "WHERE {% for key,name in pkFields %}{% if key != 0 %} and {% endif %}`{{ name }}`=:{{ name }}{% endfor %}";
+        $data = [
+        {% for key,name in pkFields %}
+            ":{{ name }}" => ${{ fields[name]["camel_down"] }},
+        {% endfor %}
+        ];
+        return $this->dao->conn(false)->setTag(self::$cacheTag)->preparedSql($sql,$data)->affectedCount();
+    }
+
+    /**
+    * Get by pk
+    {% for name in pkFields %}
+    * @param {{ fields[name]['propType'] }} ${{ name }}
+    {% endfor %}
+    * @return mixed
+    */
+    public function getByPk({% for key,name in pkFields %}${{ fields[name]["camel_down"] }}{% if key != pkFields|length-1 %}, {% endif %}{% endfor %}) {
+        $sql = "SELECT * FROM `{{ tableName }}` " .
+        "WHERE {% for key,name in pkFields %}{% if key != 0 %} and {% endif %}`{{ name }}`=:{{ name }}{% endfor %}";
+        $data = [
+        {% for key,name in pkFields %}
+            ":{{ name }}" => ${{ fields[name]["camel_down"] }},
+        {% endfor %}
+        ];
+        return $this->dao->conn(false)->setTag(self::$cacheTag)->preparedSql($sql,$data)->fetchOne();
+    }
+{% endblock %}
