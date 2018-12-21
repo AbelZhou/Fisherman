@@ -1,9 +1,9 @@
 {% extends "/model/base.twig" %}
 {% block classHead %}
     private $fields = [
-    {% for key,name in fields %}
+{% for key,name in fields %}
         "{{ key }}",
-    {% endfor %}
+{% endfor %}
     ];
 {% endblock %}
 
