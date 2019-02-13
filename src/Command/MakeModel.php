@@ -30,13 +30,15 @@ class MakeModel extends Command {
     private $workPath = "";
 
     private $typeMapping = array(
-        "VARCHAR" => "string",
-        "TEXT" => "string",
-        "CHAR" => "string",
-        "INT" => "int",
-        "FLOAT" => "float",
-        "DOUBLE" => 'float',
-        "DECIMAL" => "float"
+        'VARCHAR' => 'string',
+        'TEXT' => 'string',
+        'CHAR' => 'string',
+        'INT' => 'int',
+        'FLOAT' => 'float',
+        'DOUBLE' => 'float',
+        'DECIMAL' => 'float',
+        'MEDIUMINT' => 'int',
+        'TINYINT' => 'int'
     );
     private $mode = array(
         "base",
@@ -222,7 +224,7 @@ class MakeModel extends Command {
             $output->writeln("<fg=red>Unable to write to existing json.</>");
             return;
         }
-        $autoload = new Autoload($composerReader, "{$config['project']['name']}\\Model\\{$spaceName}\\", "Model/{$spaceName}",AutoloadSection::TYPE_PSR4);
+        $autoload = new Autoload($composerReader, "{$config['project']['name']}\\Model\\{$spaceName}\\", "Model/{$spaceName}", AutoloadSection::TYPE_PSR4);
         $section = new AutoloadSection($composerReader);
         $section->add($autoload)->save();
 
