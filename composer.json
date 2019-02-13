@@ -33,11 +33,5 @@
       "Fisherman\\Module\\": "src/Module/",
       "Fisherman\\Command\\": "src/Command/"
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Test\\Model\\Test\\": "test/Model/Test/",
-      "Test\\Module\\Test\\": "test/Module/Test/"
-    }
   }
 }
