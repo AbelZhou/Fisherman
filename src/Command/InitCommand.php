@@ -53,7 +53,8 @@ class InitCommand extends Command {
 //            "/Model/DBName/Tablename.php",
 //            "/Module/DBName/Servicename.php",
             "/composer.json",
-            "/bootstrap.php"
+            "/bootstrap.php",
+            "/.gitignore"
         );
 
         foreach ($files as $file) {

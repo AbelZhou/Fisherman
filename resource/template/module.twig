@@ -1,0 +1,33 @@
+<?php
+/**
+ *
+ * DateTime: {{ dateTime }}
+ * create by fisherman.
+ */
+
+namespace {{ projectName }}\Module\{{ spaceName }};
+
+use Fisherman\Module\ModuleAbstract;
+use Fisherman\Module\ModuleInterface;
+
+class {{moduleName}} extends ModuleAbstract {
+
+    /**
+     * @var \{{ projectName }}\Model\{{ spaceName }}\{{ className }}
+     */
+    private ${{ modelNameVar }}Model = null;
+
+
+    /**
+     * be used in construct.
+     */
+    protected function init() {
+        // TODO: Implement initClass() method.
+        $this->{{ modelNameVar }}Model = new \{{ projectName }}\Model\{{ spaceName }}\{{ className }}();
+    }
+
+    /******Your method begin******/
+
+
+    /******Your method end********/
+}

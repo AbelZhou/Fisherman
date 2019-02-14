@@ -18,6 +18,7 @@ use Nadar\PhpComposerReader\ComposerReader;
 use PhpMyAdmin\SqlParser\Parser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,7 +41,7 @@ class MakeModel extends Command {
         'MEDIUMINT' => 'int',
         'TINYINT' => 'int'
     );
-    private $mode = array(
+    private $type = array(
         "base",
         "curd"
     );
@@ -52,26 +53,36 @@ class MakeModel extends Command {
 
     protected function configure() {
         $this->setDescription("Create model from database.")->setHelp("Create a database access object model.");
+        $this->setDefinition(
+            new InputDefinition([
+                new InputOption("spacename", "s", InputOption::VALUE_REQUIRED, "It's suffix of namespace.Well be making ProjectName\\Model\\SpaceName namespace.And create \"Model/SpaceName\" folder in project.Default:database name."),
+                new InputOption('module', 'm', InputOption::VALUE_REQUIRED, "Create a module file which include the model.")
+            ])
+        );
+
         $this
             ->addArgument("DatabaseTag", InputArgument::REQUIRED, "Database tag in db.yml.")
             ->addArgument("TableName", InputArgument::OPTIONAL, "Table name.Consistent with database table which you want to make table.Generates a file name with the first letter uppercase.")
-            ->addArgument("SpaceName", InputArgument::OPTIONAL, "Namespace.Well be making ProjectName\\Model\\SpaceName namespace.And create \"Model/SpaceName\" folder in project.")
-            ->addOption("module", "M", InputOption::VALUE_NONE, "Make same module.")
-            ->addOption("mode", "m", InputOption::VALUE_OPTIONAL, "Mode for model object.[base|curd]", "curd");
+//            ->addArgument("SpaceName", InputArgument::OPTIONAL, "It's suffix of namespace.Well be making ProjectName\\Model\\SpaceName namespace.And create \"Model/SpaceName\" folder in project.")
+//            ->addOption("module", "M", InputOption::VALUE_NONE, "Make same module.")
+            ->addOption("type", "t", InputOption::VALUE_OPTIONAL, "Mode for model object.[base|curd]", "curd");
+
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $dbTag = $input->getArgument("DatabaseTag");
         $tableName = $input->getArgument("TableName");
-        $spaceName = $input->getArgument("SpaceName");
-        $withModule = $input->getOption("module");
-        $mode = $input->getOption("mode");
+        $spaceName = $input->getOption("spacename");
+        $moduleName = $input->getOption("module");
+        $type = $input->getOption("type");
         $inflector = Inflector::get('en');
 
+
         //********************check****************************
-        if (!in_array($mode, $this->mode, true)) {
-            $modeStr = implode(" or ", $this->mode);
-            $output->writeln("Mode was error.It's must be <fg=red>{$modeStr}</>.");
+        if (!in_array($type, $this->type, true)) {
+            $typeStr = implode(" or ", $this->type);
+            $output->writeln("Mode was error.It's must be <fg=red>{$typeStr}</>.");
             return;
         }
 
@@ -177,6 +188,7 @@ class MakeModel extends Command {
         $renderArr["databaseName"] = $this->databaseName;
         $renderArr["tableName"] = $tableName;
         $renderArr["className"] = $inflector->camelize($tableName, Inflector::UPCASE_FIRST_LETTER);
+        $renderArr["modelNameVar"] = $inflector->camelize($tableName, Inflector::DOWNCASE_FIRST_LETTER);
         $renderArr["spaceName"] = $spaceName;
         $renderArr["dbTag"] = $dbTag;
         $renderArr["fields"] = $fields;
@@ -189,12 +201,15 @@ class MakeModel extends Command {
         $output->writeln("Build model file.");
         $loader = new FilesystemLoader(FINISHERMAN_PATH . "/resource/template");
         $twig = new Environment($loader);
-        $modelTemplate = $twig->load("/model/{$mode}.twig");
+
+        /*****************model template*************/
+        $modelTemplate = $twig->load("/model/{$type}.twig");
         $modelString = $modelTemplate->render($renderArr);
         $modelPath = $this->workPath . "/Model/{$spaceName}";
         $modelFilePath = $modelPath . "/{$renderArr["className"]}.php";
+
         if (!is_dir($modelPath)) {
-            $output->writeln("Create path: <fg=green>{$modelPath}</>");
+            $output->writeln("<fg=green>Create path for model: {$modelPath}</>");
             if (!mkdir($modelPath, 0755, true) && !is_dir($modelPath)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $modelPath));
             }
@@ -204,16 +219,29 @@ class MakeModel extends Command {
             $output->writeln("Model file exists witch path is <fg=red>{$modelFilePath}</>.");
             return;
         }
-        $modelFile = fopen($modelFilePath, "w");
-        if ($modelFile == false) {
-            $output->writeln("Can not create model file: <fg=red>{$modelFilePath}</>");
-            return;
-        }
-        fwrite($modelFile, $modelString);
-        fclose($modelFile);
 
-        /******************build composer.json**************/
-        $output->writeln("Build composer.json.");
+        /****************module template********************/
+        if (!empty($moduleName)) {
+            $renderArr["moduleName"] = $moduleName;
+            $moduleTemplate = $twig->load("/module.twig");
+
+            $moduleString = $moduleTemplate->render($renderArr);
+            $modulePath = $this->workPath . "/Module/{$spaceName}";
+            $moduleFilePath = $modulePath . "/{$moduleName}.php";
+            if (!is_dir($modulePath)) {
+                $output->writeln("<fg=green>Create path for module: {$modulePath}</>");
+                if (!mkdir($modulePath, 0755, true) && !is_dir($modulePath)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $modulePath));
+                }
+            }
+            if (file_exists($moduleFilePath)) {
+                $output->writeln("Module file exists witch path is <fg=red>{$modelFilePath}</>.");
+                return;
+            }
+        }
+
+        /******************check composer writeable***********/
+
         $composerReader = new ComposerReader($this->workPath . "/composer.json");
         if (!$composerReader->canRead()) {
             $output->writeln("<fg=red>Unable to read json.</>");
@@ -224,9 +252,47 @@ class MakeModel extends Command {
             $output->writeln("<fg=red>Unable to write to existing json.</>");
             return;
         }
-        $autoload = new Autoload($composerReader, "{$config['project']['name']}\\Model\\{$spaceName}\\", "Model/{$spaceName}", AutoloadSection::TYPE_PSR4);
+
+        /****************output file*************************/
+        $modelFile = fopen($modelFilePath, "w");
+        if ($modelFile == false) {
+            $output->writeln("Can not create model file: <fg=red>{$modelFilePath}</>");
+            return;
+        }
+
+        if (!empty($moduleName)) {
+            $moduleFile = fopen($moduleFilePath, 'w');
+            if ($moduleFile == false) {
+                $output->writeln("Can not create model file: <fg=red>{$modelFilePath}</>");
+                return;
+            }
+        }
+
+
+        fwrite($modelFile, $modelString);
+        fclose($modelFile);
+
+        if (!empty($moduleName)) {
+            fwrite($moduleFile, $moduleString);
+            fclose($moduleFile);
+        }
+
+
+        /******************build composer.json**************/
+        $output->writeln("Build composer.json.");
+
+
+        $autoloadModel = new Autoload($composerReader, "{$config['project']['name']}\\Model\\{$spaceName}\\", "Model/{$spaceName}", AutoloadSection::TYPE_PSR4);
         $section = new AutoloadSection($composerReader);
-        $section->add($autoload)->save();
+        $section->add($autoloadModel);
+
+        if (!empty($moduleName)) {
+            $autoloadModule = new Autoload($composerReader, "{$config['project']['name']}\\Module\\{$spaceName}\\", "Module/{$spaceName}", AutoloadSection::TYPE_PSR4);
+            $section->add($autoloadModule);
+        }
+
+        $composerReader->save();
+
 
         //composer autoload.
         $executeOutput = null;
