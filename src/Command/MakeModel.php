@@ -39,7 +39,9 @@ class MakeModel extends Command {
         'DOUBLE' => 'float',
         'DECIMAL' => 'float',
         'MEDIUMINT' => 'int',
-        'TINYINT' => 'int'
+        'TINYINT' => 'int',
+        'BIGINT' => 'int',
+        'DATETIME' => 'string'
     );
     private $type = array(
         "base",
